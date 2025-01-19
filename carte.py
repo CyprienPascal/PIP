@@ -266,7 +266,7 @@ if page == "Résulat des élections":
         
 
     # Affichage de la carte
-    if os.path.exists(file_name):
+    if (file_name):
         st.components.v1.html(open(file_name, "r", encoding="utf-8").read(), height=600, scrolling=True)
         # Affichage du texte contextuel basé sur l'année et le tour
         if election_type == "Législatives":
