@@ -263,13 +263,15 @@ if page == "Résulat des élections":
         # Ajout d'images pour les législatives
         st.image("voteevol.png", caption="Evolution du vote au fil des années",width=600)
         st.image("piechart.png", caption="répartition des votes pour le premier tour")
-        st.components.v1.html(open(file_name, "r", encoding="utf-8").read(), height=600, scrolling=True)
-        # Affichage du texte contextuel basé sur l'année et le tour
+        if file_name:
+            st.components.v1.html(open(file_name, "r", encoding="utf-8").read(), height=600, scrolling=True)
+            # Affichage du texte contextuel basé sur l'année et le tour
         if election_type == "Législatives":
             st.markdown(f"**Analyse des résultats pour le {tour.lower().replace('t', 'tour ')} de l'année {annee} :**")
             st.markdown("Ces cartes montrent le résultat des élections législatives depuis l'élection de M.Macron en 2017.")
             if tour == "T2":
                 st.markdown("De plus, si un département ou une circonscription manque sur le Tour 2 c'est qu'il a gagné au Tour 1.")
+    
 if page == "Analyse sur le chomage":
     st.title("Analyse sur le chomage")
     annee = st.selectbox("Année", ["2017", "2022","2024"])
