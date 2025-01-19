@@ -152,7 +152,7 @@ def load_unemployment_data():
         return pd.DataFrame()
 
 # Charger les données démographiques
-@st.cache
+@st.cache_data
 def load_demographic_data():
     try:
         return pd.read_csv('donnees_2017_2022.csv')
@@ -161,7 +161,7 @@ def load_demographic_data():
         return pd.DataFrame()
 
 # Charger les données principales
-@st.cache
+@st.cache_data
 def load_data():
     try:
         return pd.read_csv('data_elections.csv', low_memory=False)
@@ -170,7 +170,7 @@ def load_data():
         return pd.DataFrame()
 
 # Charger les données de pauvreté
-@st.cache
+@st.cache_data
 def load_poverty_data():
     try:
         return pd.read_csv('moyenne_pauvrete_par_departement.csv')
@@ -1109,7 +1109,7 @@ elif page == "Analyse Approfondie de l'Abstention et de ses Liens Socio-économi
         ax.grid(alpha=0.3)
         st.pyplot(fig)
 
-    @st.cache
+    @st.cache_data
     def convert_to_csv(df):
         return df.to_csv(index=False).encode('utf-8')
 
@@ -1224,7 +1224,7 @@ elif page == "Analyse Approfondie de l'Abstention et de ses Liens Socio-économi
         
 if page == "Analyse globale de la population française":
         # Charger les données
-    @st.cache
+    @st.cache_data
     def load_votes_data_2024():
         try:
             return pd.read_csv('df_jointure_2024.csv')
@@ -1232,7 +1232,7 @@ if page == "Analyse globale de la population française":
             st.error("Fichier 'df_jointure_2024.csv' introuvable. Assurez-vous qu'il est dans le même répertoire que le script.")
             return pd.DataFrame()
     
-    @st.cache
+    @st.cache_data
     def load_votes_data_2022():
         try:
             return pd.read_csv('df_jointure_2022.csv')
@@ -1240,7 +1240,7 @@ if page == "Analyse globale de la population française":
             st.error("Fichier 'df_jointure_2022.csv' introuvable. Assurez-vous qu'il est dans le même répertoire que le script.")
             return pd.DataFrame()
     
-    @st.cache
+    @st.cache_data
     def load_demographics_data():
         try:
             return pd.read_csv('df_age.csv')
