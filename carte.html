@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats des Élections</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            background-color: #f9f9f9;
+            height: 100vh;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px;
+        }
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        iframe {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 90vw;
+            height: 75vh;
+        }
+    </style>
+    <script>
+        function mettreAJourCarte() {
+            const niveau = document.getElementById('niveauSelector').value;
+            const type = document.getElementById('typeSelector').value;
+            const annee = document.getElementById('anneeSelector').value;
+            const tour = document.getElementById('tourSelector').value;
+
+            let fichier = "";
+
+            if (type === "presidentielle") {
+                if (niveau !== "departement") {
+                    alert("Pour les présidentielles, seul le niveau département est disponible.");
+                    document.getElementById('niveauSelector').value = "departement";
+                    return;
+                }
+                fichier = `resultats_electoraux_interactifs_${annee}_${tour}.html`;
+            } else {
+                fichier = niveau === "circonscription" 
+                    ? `res_${annee}_${tour}_circo_circo.html` 
+                    : `res_${annee}_${tour}_dept.html`;
+            }
+
+            document.getElementById('carteFrame').src = fichier;
+        }
+
+        // Initialiser la carte avec les valeurs par défaut
+        document.addEventListener('DOMContentLoaded', mettreAJourCarte);
+    </script>
+</head>
+<body>
+    <header>Résultats des Élections</header>
+
+    <div class="controls">
+        <select id="typeSelector" onchange="mettreAJourCarte()">
+            <option value="legislative">Législative</option>
+            <option value="presidentielle">Présidentielle</option>
+        </select>
+
+        <select id="niveauSelector" onchange="mettreAJourCarte()">
+            <option value="circonscription">Circonscription</option>
+            <option value="departement">Département</option>
+        </select>
+
+        <select id="anneeSelector" onchange="mettreAJourCarte()">
+            <option value="2017">2017</option>
+            <option value="2022">2022</option>
+            <option value="2024">2024</option>
+        </select>
+
+        <select id="tourSelector" onchange="mettreAJourCarte()">
+            <option value="T1">Tour 1</option>
+            <option value="T2">Tour 2</option>
+        </select>
+    </div>
+
+    <iframe id="carteFrame" src="" title="Carte des résultats"></iframe>
+</body>
+</html>
