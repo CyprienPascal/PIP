@@ -238,7 +238,7 @@ if page == "Présentation":
   <li>Pascal Cyprien</li>
 </ul>
 """, unsafe_allow_html=True)
-if page == "Résulat des élections":
+if page == "Résultat des élections":
     # Titre principal
     st.title("Résultats des Élections")
 
