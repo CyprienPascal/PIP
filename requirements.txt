@@ -1,3 +1,4 @@
+pip
 streamlit
 os
 pandas==1.5.3
