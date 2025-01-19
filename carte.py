@@ -251,15 +251,50 @@ if page == "Résulat des élections":
 
     # Génération du nom de fichier en fonction du type d'élection
     if election_type == "Présidentielles":
-        niveau = None
-        file_name = f"resultats_electoraux_interactifs_{annee}_{tour}.html"
-    else:
+        if annee == "2017"
+            if tour== "T1":
+                st.components.v1.html(open("resultats_electoraux_interactifs_2017_T1.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
+            if tour == "T2":
+                st.components.v1.html(open("resultats_electoraux_interactifs_2017_T2.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
+        if annee = "2022"
+            if tour== "T1":
+                st.components.v1.html(open("resultats_electoraux_interactifs_2022_T1.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
+            if tour == "T2":
+                st.components.v1.html(open("resultats_electoraux_interactifs_2022_T2.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
+    if election_type == "Législatives":
         niveau = st.selectbox("Niveau", ["Circonscription", "Département"])
-        if niveau == "Circonscription":
-            file_name = f"res_{annee}_{tour}_circo_circo.html"
-        else:
-            file_name = f"res_{annee}_{tour}_dept.html"
-
+        if niveau =="Circonscription":
+            if annee == "2017"
+                if tour== "T1":
+                    st.components.v1.html(open("res_2017_T1_circo_circo.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
+                if tour == "T2":
+                    st.components.v1.html(open("res_2017_T2_circo_circo.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
+            if annee = "2022"
+                if tour== "T1":
+                    st.components.v1.html(open("res_2022_T1_circo_circo.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
+                if tour == "T2":
+                    st.components.v1.html(open("res_2022_T2_circo_circo.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
+            if annee == "2024":
+                if tour== "T1":
+                    st.components.v1.html(open("res_2024_T2_circo_circo.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
+                if tour == "T2":
+                    st.components.v1.html(open("res_2024_T2_circo_circo.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
+        if niveau =="Département":
+            if annee == "2017"
+                if tour== "T1":
+                    st.components.v1.html(open("res_2017_T1_dept.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
+                if tour == "T2":
+                    st.components.v1.html(open("res_2017_T2_dept.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
+            if annee = "2022"
+                if tour== "T1":
+                    st.components.v1.html(open("res_2022_T1_dept.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
+                if tour == "T2":
+                    st.components.v1.html(open("res_2022_T2_dept.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
+            if annee == "2024":
+                if tour== "T1":
+                    st.components.v1.html(open("res_2024_T1_dept.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
+                if tour == "T2":
+                    st.components.v1.html(open("res_2024_T2_dept.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
         # Ajout d'images pour les législatives
         st.image("voteevol.png", caption="Evolution du vote au fil des années",width=600)
         st.image("piechart.png", caption="répartition des votes pour le premier tour")
