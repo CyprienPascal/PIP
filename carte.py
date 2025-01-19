@@ -263,10 +263,6 @@ if page == "Résulat des élections":
         # Ajout d'images pour les législatives
         st.image("voteevol.png", caption="Evolution du vote au fil des années",width=600)
         st.image("piechart.png", caption="répartition des votes pour le premier tour")
-        
-
-    # Affichage de la carte
-    if (file_name):
         st.components.v1.html(open(file_name, "r", encoding="utf-8").read(), height=600, scrolling=True)
         # Affichage du texte contextuel basé sur l'année et le tour
         if election_type == "Législatives":
