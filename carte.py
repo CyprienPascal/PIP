@@ -256,7 +256,7 @@ if page == "Résulat des élections":
                 st.components.v1.html(open("resultats_electoraux_interactifs_2017_T1.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
             if tour == "T2":
                 st.components.v1.html(open("resultats_electoraux_interactifs_2017_T2.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
-        if annee = "2022":
+        if annee == "2022":
             if tour== "T1":
                 st.components.v1.html(open("resultats_electoraux_interactifs_2022_T1.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
             if tour == "T2":
@@ -269,7 +269,7 @@ if page == "Résulat des élections":
                     st.components.v1.html(open("res_2017_T1_circo_circo.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
                 if tour == "T2":
                     st.components.v1.html(open("res_2017_T2_circo_circo.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
-            if annee = "2022":
+            if annee == "2022":
                 if tour== "T1":
                     st.components.v1.html(open("res_2022_T1_circo_circo.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
                 if tour == "T2":
@@ -285,7 +285,7 @@ if page == "Résulat des élections":
                     st.components.v1.html(open("res_2017_T1_dept.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
                 if tour == "T2":
                     st.components.v1.html(open("res_2017_T2_dept.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
-            if annee = "2022":
+            if annee == "2022":
                 if tour== "T1":
                     st.components.v1.html(open("res_2022_T1_dept.html", "r", encoding="utf-8").read(), height=600, scrolling=True)
                 if tour == "T2":
