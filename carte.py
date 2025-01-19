@@ -143,7 +143,7 @@ def apply_custom_design():
     )
 
 
-apply_custom_design()
+
 def load_unemployment_data():
     try:
         return pd.read_csv('taux_chomage_par_departement.csv')
@@ -503,77 +503,112 @@ if page == "Analyse sur le revenu":
 
 if page == "Résultat sur le vote et audiovisuel":
     df_all = pd.read_csv("df_all_export.csv", delimiter=';')
-    df_all['Voix'] = pd.to_numeric(df_all['Voix'], errors='coerce')
-    df_all['Elu'] = pd.to_numeric(df_all['Elu'], errors='coerce')
+    df_chaine = pd.read_csv('ina-barometre-jt-tv-donnee-mois-theme-2000-2020.csv', delimiter=';')
+    df_chaine.columns = ['Annee', 'Mois', 'Chaîne', 'PartdAudience', 'Thématique', 'Nb_Thème', 'Nb_temps']
+
+
+    df_chaine['Annee'] = df_chaine['Annee'].astype(int)
+    df_chaine['Nb_Thème'] = pd.to_numeric(df_chaine['Nb_Thème'], errors='coerce')
+    df_chaine['Nb_temps'] = pd.to_numeric(df_chaine['Nb_temps'], errors='coerce')
+    
+    df_chaine_transformed = df_chaine.groupby(['Annee', 'Chaîne', 'Thématique'], as_index=False).agg({
+        'Nb_Thème': 'sum',
+        'Nb_temps': 'sum'
+    })
     
     # Options disponibles
     relevant_years = [2002, 2007, 2012, 2017, 2022, 2024]
+    available_channels = df_chaine_transformed['Chaîne'].unique()
+    available_thematics = df_chaine_transformed['Thématique'].unique()
     available_sexes = df_all['Sexe'].unique()
     
-    # Interface utilisateur
-    st.title("Analyse des Données Électorales")
+    # Interface utilisateur avec Streamlit
+    st.title("Analyse des Données")
     
-    # Sélection de l'année
-    selected_year = st.selectbox("Choisir l'Année", relevant_years, index=relevant_years.index(2022))
+    # Sélection de l'Annee
+    selected_year = st.selectbox("Choisir l'Annee", relevant_years, index=relevant_years.index(2022))
     
     # Filtrer par sexe
     selected_sexes = st.multiselect("Filtrer par sexe", available_sexes, default=list(available_sexes))
     
     # Graphique des élections
     st.subheader(f"Élections {selected_year} : Voix et Élus par Nuance")
-    
-    # Filtrer les données pour l'année et le sexe sélectionnés
     filtered = df_all[(df_all['Annee'] == selected_year) & (df_all['Sexe'].isin(selected_sexes))]
+    grouped = filtered.groupby("Nuance").agg({"Voix": "sum", "Elu": "sum"}).reset_index()
+    grouped = grouped.sort_values("Voix", ascending=False)
     
-    # Vérifier si les données filtrées ne sont pas vides
-    if filtered.empty:
-        st.warning("Aucune donnée disponible pour les sélections actuelles.")
-    else:
-        # Regrouper les données par Nuance
-        grouped = filtered.groupby("Nuance").agg({"Voix": "sum", "Elu": "sum"}).reset_index()
-        grouped = grouped.sort_values("Voix", ascending=False)
-        
-        # Vérifier les données regroupées
-        st.write("Aperçu des données utilisées pour le graphique :", grouped)
+    fig_election = go.Figure()
+    fig_election.add_trace(go.Bar(
+        x=grouped["Nuance"],
+        y=grouped["Voix"],
+        name="Voix",
+        marker_color='blue',
+        text=grouped["Voix"],
+        textposition='outside'
+    ))
+    fig_election.add_trace(go.Bar(
+        x=grouped["Nuance"],
+        y=grouped["Elu"],
+        name="Élus",
+        marker_color='orange',
+        text=grouped["Elu"],
+        textposition='outside'
+    ))
+    fig_election.update_layout(
+        xaxis_title="Nuance (Parti)",
+        yaxis_title="Nombre total",
+        barmode='group',
+        bargap=0.15
+    )
+    st.plotly_chart(fig_election)
     
-        # Créer le graphique
-        fig_election = go.Figure()
-        fig_election.add_trace(go.Bar(
-            x=grouped["Nuance"],
-            y=grouped["Voix"],
-            name="Voix",
-            marker_color='blue',
-            text=grouped["Voix"],
-            textposition='outside'  # Change la position du texte
-        ))
-        fig_election.add_trace(go.Bar(
-            x=grouped["Nuance"],
-            y=grouped["Elu"],
-            name="Élus",
-            marker_color='orange',
-            text=grouped["Elu"],
-            textposition='outside'  # Change la position du texte
-        ))
+    # Sélection des chaînes télévisées
+    st.subheader("Analyse des Chaînes Télévisées")
+    selected_channels = st.multiselect("Choisir les chaînes télévisées", available_channels, default=[available_channels[0]])
     
-        # Mise en page et affichage
-        fig_election.update_layout(
-            title="Voix et Élus par Nuance",
-            xaxis_title="Nuance (Parti)",
-            yaxis_title="Nombre total",
-            barmode='group',
-            bargap=0.15,
-            plot_bgcolor="white",  # Fond blanc pour un meilleur contraste
-            xaxis=dict(showgrid=False),
-            yaxis=dict(showgrid=True),
-            legend_title="Légende",
-            font=dict(size=12),
-            margin=dict(l=40, r=40, t=60, b=40),  # Marges ajustées
-            width=800,  # Largeur fixe
-            height=600  # Hauteur fixe
+    # Sélection des thématiques
+    selected_thematics = st.multiselect("Choisir les thématiques", available_thematics, default=[available_thematics[0]])
+    
+    # Choix de la métrique
+    selected_metric = st.radio("Choisir la métrique", ["Nb_Thème", "Nb_temps"], index=0)
+    
+    # Graphique des chaînes télévisées
+    filtered = df_chaine_transformed[
+        (df_chaine_transformed['Annee'] <= selected_year) &
+        (df_chaine_transformed['Chaîne'].isin(selected_channels)) &
+        (df_chaine_transformed['Thématique'].isin(selected_thematics))
+    ]
+    
+    if not filtered.empty:
+        grouped = filtered.groupby(['Annee', 'Thématique'])[selected_metric].sum().reset_index()
+    
+        fig_channel = go.Figure()
+        color_map = {
+            thematic: f'rgba({i*50 % 255}, {i*100 % 255}, {i*150 % 255}, 0.9)'
+            for i, thematic in enumerate(selected_thematics)
+        }
+    
+        for thematic in selected_thematics:
+            thematic_data = grouped[grouped['Thématique'] == thematic]
+            fig_channel.add_trace(go.Scatter(
+                x=thematic_data['Annee'],
+                y=thematic_data[selected_metric],
+                mode='lines',
+                fill='tonexty',
+                name=thematic,
+                line=dict(color=color_map[thematic])
+            ))
+        fig_channel.update_layout(
+            title=f"Évolution des thématiques pour les chaînes sélectionnées jusqu'à {selected_year}",
+            xaxis_title="Annee",
+            yaxis_title="Valeur",
+            legend_title="Thématique",
+            plot_bgcolor="white"
         )
-    
-        # Afficher le graphique
-        st.plotly_chart(fig_election)
+        st.plotly_chart(fig_channel)
+    else:
+        st.warning("Aucune donnée disponible pour les sélections actuelles.")
+
             
 if page == "Cas de la Haute-Garonne":
     # Fonction pour charger et afficher un fichier HTML (pour les maps interactives)
@@ -675,6 +710,7 @@ if page == "Cas de la Haute-Garonne":
 
 
 if page ==     "Analyse Générale de l'Abstention Électorale":
+    apply_custom_design()
     st.header("Tendances de l'abstention et statistiques globales ")
 
     # Calculer le taux moyen d'abstention par élection
@@ -861,6 +897,7 @@ if page ==     "Analyse Générale de l'Abstention Électorale":
 
 
 elif page == "Analyse Approfondie de l'Abstention et de ses Liens Socio-économiques":
+    apply_custom_design()
     st.header("Analyse des Votes Blancs, Nuls et Abstentions")
     st.markdown("""
     Un **vote blanc** est exprimé lorsque l'enveloppe ou le bulletin est vide, tandis qu'un **vote nul** correspond à un bulletin non valide (rayé, annoté, etc.). Ces votes reflètent une expression particulière des électeurs vis-à-vis des options proposées.
