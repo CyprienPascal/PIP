@@ -270,9 +270,6 @@ if page == "Résulat des élections":
             st.markdown("Ces cartes montrent le résultat des élections législatives depuis l'élection de M.Macron en 2017.")
             if tour == "T2":
                 st.markdown("De plus, si un département ou une circonscription manque sur le Tour 2 c'est qu'il a gagné au Tour 1.")
-            
-    else:
-        st.error(f"Le fichier {file_name} n'existe pas.")
 if page == "Analyse sur le chomage":
     st.title("Analyse sur le chomage")
     annee = st.selectbox("Année", ["2017", "2022","2024"])
